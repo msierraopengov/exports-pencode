@@ -28,11 +28,12 @@ let options = {
     field: ',', // Comma field delimiter
     eol: '\n', // Newline delimiter
   },
-  emptyFieldValue: '""',
 };
 
 let json2csvCallback = function (err, csv) {
   if (err) throw err;
+  csv = csv.replaceAll('__1', '');
+  csv = csv.replaceAll('undefined', '');
   console.log(csv);
 };
 
