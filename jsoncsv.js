@@ -1,41 +1,12 @@
-let converter = require('json-2-csv');
-const jsonCSV = [
-  {
-    '': '',
-    'GL Transactions': 2021,
-    '2022 Adopted Budget': 2022,
-    Calculation: 'Calculation #1',
-    Calculation__1: 'Calculation #2',
-  },
-  {
-    '': 'Expenses',
-    'GL Transactions': 2781999.7,
-    '2022 Adopted Budget': 2876313,
-    Calculation: 94313.3,
-    Calculation__1: 1.0339,
-  },
-  {
-    '': 'Expenses | Admin & Services',
-    'GL Transactions': 37812.47,
-    '2022 Adopted Budget': 142823,
-    Calculation: 105010.53,
-    Calculation__1: 3.7771,
-  },
-];
+const csv2json = require('csvjson-csv2json');
 
-let options = {
-  delimiter: {
-    field: ',', // Comma field delimiter
-    eol: '\n', // Newline delimiter
-  },
-};
+let csv = `"","GL Transactions","2022 Adopted Budget","Calculation","Calculation__1","Proposed Budget, 2",""
+"","2021","2022","Calculation #1","Calculation #2","2023","2024"
+"Expenses","2781999.7","2876313","94313.3","1.0339","14068629.12","14068629.12"
+"Revenues","2403206.89","926094","-1477112.89","0.3853","18061618.75","18061618.75"
+`;
 
-let json2csvCallback = function (err, csv) {
-  if (err) throw err;
-  csv = csv.replaceAll('__1', '');
-  csv = csv.replaceAll('undefined', '');
-  console.log(csv);
-};
+const jsonCSV = csv2json(csv, { parseNumbers: true });
 
 let biggerChild = 0;
 
@@ -91,10 +62,9 @@ jsonCSV.forEach((element, index) => {
 
 //remove all child names
 const stringified = JSON.stringify(jsonCSV);
-const regexp = /^Child-[0-9]+$/g;
-const result = JSON.parse(stringified.replaceAll('Child-1', '__1'));
+//const regexp = /^Child-[0-9]+$/g;
+const result = JSON.parse(stringified);
 
-//var csv is the CSV file with headers
-converter.json2csv(result, json2csvCallback, options);
+console.log(result);
 
 //end step remove __number on the csv already created
